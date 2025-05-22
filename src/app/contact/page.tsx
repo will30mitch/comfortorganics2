@@ -8,7 +8,7 @@ export default function ContactPage() {
       </div>
       <div className="max-w-2xl w-full bg-white rounded-2xl shadow p-4 sm:p-8 border-t-4 border-green-500 mb-8">
         <div className="mb-6 text-center text-black text-sm sm:text-base">
-          <p className="mb-2"><b>Phone:</b> (903) 426-2984</p>
+          <p className="mb-2"><b>Phone:</b> (903) 524-0310</p>
           <p className="mb-2"><b>Best Time to Call:</b> Mon-Fri, 9am - 5pm</p>
           <p className="mb-2"><b>Email:</b> customersupport@comfortorganics.shop</p>
         </div>
