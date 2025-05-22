@@ -174,9 +174,9 @@ export default function Home() {
         {loading ? (
           <div className="bg-white rounded-2xl shadow p-8 text-center">Loading...</div>
         ) : (
-          <div className="flex flex-row gap-12 w-full justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 w-full items-center justify-center">
             {products.slice(0, 2).map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center border-t-4 border-green-400 transition-transform w-full max-w-xl min-w-[340px]">
+              <div key={product.id} className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center border-t-4 border-green-400 transition-transform w-full max-w-xs sm:max-w-xl">
                 <ProductCard 
                   product={product} 
                   onViewDetails={setSelectedProduct} 
