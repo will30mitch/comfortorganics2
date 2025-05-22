@@ -83,10 +83,15 @@ export default function CartPage() {
               ))}
             </ul>
             <div className="font-bold text-xl mb-4" style={{ color: 'black' }}>Total: ${total.toFixed(2)}</div>
+            {total < 100 && (
+              <div className="text-red-600 font-semibold mb-2">
+                Minimum order amount is $100. Please add more items to your cart to proceed to checkout.
+              </div>
+            )}
             <button
               className="bg-green-600 text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition mb-2 disabled:opacity-50"
               onClick={handleCheckout}
-              disabled={cart.length === 0 || loading}
+              disabled={cart.length === 0 || loading || total < 100}
             >
               {loading ? 'Redirecting...' : 'Checkout'}
             </button>
