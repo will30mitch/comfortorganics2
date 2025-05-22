@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
@@ -16,29 +15,11 @@ export async function GET() {
     }
 
     // Verify token
-    const decoded = verify(token, process.env.JWT_SECRET || 'your-secret-key') as { userId: string };
-
-    // Get user
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { authenticated: false },
-        { status: 401 }
-      );
-    }
+    const decoded = verify(token, process.env.JWT_SECRET || 'your-secret-key');
 
     return NextResponse.json({
       authenticated: true,
-      user,
+      user: decoded,
     });
   } catch (error) {
     console.error('Auth check error:', error);

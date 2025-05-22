@@ -10,8 +10,6 @@
     "run": "next start"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
-    "@prisma/extension-accelerate": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "framer-motion": "^12.12.1",
     "jsonwebtoken": "^9.0.2",
@@ -27,7 +25,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "prisma": "^5.10.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
