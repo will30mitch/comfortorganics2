@@ -8,7 +8,7 @@ const squareClient = new Client({
 
 export async function POST(req: Request) {
   try {
-    const { cart, deliveryOption } = await req.json();
+    const { cart } = await req.json();
     const lineItems = cart.map((item: any) => ({
       name: item.name,
       quantity: item.quantity.toString(),
@@ -17,16 +17,6 @@ export async function POST(req: Request) {
         currency: 'USD',
       },
     }));
-    if (deliveryOption === 'delivery') {
-      lineItems.push({
-        name: 'Delivery Fee',
-        quantity: '1',
-        basePriceMoney: {
-          amount: 1000, // $10 in cents
-          currency: 'USD',
-        },
-      });
-    }
 
     const { result } = await squareClient.checkoutApi.createCheckout(process.env.SQUARE_LOCATION_ID!, {
       idempotencyKey: Math.random().toString(36).substring(2),
@@ -36,7 +26,7 @@ export async function POST(req: Request) {
           lineItems,
         },
       },
-      askForShippingAddress: false,
+      askForShippingAddress: true,
       redirectUrl: process.env.NEXT_PUBLIC_CHECKOUT_REDIRECT_URL || 'http://localhost:3000/cart',
     });
 

@@ -47,7 +47,7 @@ export default function AboutPage() {
         <div className="space-y-4 sm:space-y-6">
           <div className="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
             <div className="font-bold text-yellow-700 mb-1">Age Restriction</div>
-            <div className="text-gray-700 text-sm">You must be 21 years or older to purchase our products. We will verify your age at checkout and delivery.</div>
+            <div className="text-gray-700 text-sm">You must be 21 years or older to purchase our products. We will verify your age at checkout.</div>
           </div>
           <div className="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400">
             <div className="font-bold text-yellow-700 mb-1">Health Warning</div>

@@ -7,13 +7,7 @@ export default function CartPage() {
   const { cart, removeFromCart, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [deliveryOption, setDeliveryOption] = useState<'pickup' | 'delivery'>('pickup');
-  const [deliveryFee, setDeliveryFee] = useState(0);
-  const deliveryMin = 50;
-  const deliveryFeeAmount = 10;
-  const isDelivery = deliveryOption === 'delivery';
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const total = subtotal + (isDelivery ? deliveryFeeAmount : 0);
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   // Save order if redirected back from Square checkout
   useEffect(() => {
@@ -37,7 +31,7 @@ export default function CartPage() {
       const res = await fetch('/api/square/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cart, deliveryOption }),
+        body: JSON.stringify({ cart }),
       });
       const data = await res.json();
       if (data.checkoutUrl) {
@@ -57,37 +51,13 @@ export default function CartPage() {
       {/* Header */}
       <div className="w-full max-w-4xl bg-gradient-to-r from-green-500 to-yellow-400 rounded-2xl shadow-lg mb-12 p-8 flex flex-col items-center">
         <h1 className="text-5xl font-bold text-white mb-2 text-center drop-shadow-lg">Your Cart</h1>
-        <p className="text-xl text-white text-center font-light">Review your selected products and proceed to checkout</p>
+        <p className="text-xl text-white text-center font-light">Review your selected products and proceed to secure checkout</p>
       </div>
       <div className="bg-white rounded-2xl shadow p-8 border-t-4 border-green-500 max-w-xl w-full text-center">
         {cart.length === 0 ? (
           <p className="text-gray-700">Your cart is currently empty. Add products from the <b>Products</b> page!</p>
         ) : (
           <>
-            <div className="flex justify-center gap-6 mb-4 text-black">
-              <label>
-                <input
-                  type="radio"
-                  name="deliveryOption"
-                  value="pickup"
-                  checked={deliveryOption === 'pickup'}
-                  onChange={() => setDeliveryOption('pickup')}
-                  className="mr-2"
-                />
-                Pickup
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="deliveryOption"
-                  value="delivery"
-                  checked={deliveryOption === 'delivery'}
-                  onChange={() => setDeliveryOption('delivery')}
-                  className="mr-2"
-                />
-                Delivery (+$10 fee, $50 min)
-              </label>
-            </div>
             <ul className="mb-4 divide-y">
               {cart.map((item) => (
                 <li key={item.id} className="flex justify-between items-center py-2">
@@ -112,24 +82,21 @@ export default function CartPage() {
                 </li>
               ))}
             </ul>
-            <div className="font-bold text-xl mb-2" style={{ color: 'black' }}>Subtotal: ${subtotal.toFixed(2)}</div>
-            {isDelivery && (
-              <div className="mb-2 text-black">Delivery Fee: <span className="font-bold">${deliveryFeeAmount.toFixed(2)}</span></div>
-            )}
-            <div className="font-bold text-xl mb-4" style={{ color: 'black' }}>Total: ${total.toFixed(2)}</div>
-            {isDelivery && subtotal < deliveryMin && (
-              <div className="text-red-600 font-semibold mb-2">
-                Minimum order amount for delivery is ${deliveryMin}. Please add more items to your cart to proceed to checkout.
-              </div>
-            )}
+            <div className="font-bold text-xl mb-4" style={{ color: 'black' }}>Subtotal: ${total.toFixed(2)}</div>
+            <div className="text-sm text-gray-600 mb-4">
+              Shipping and handling will be calculated at checkout
+            </div>
             <button
-              className="bg-green-600 text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition mb-2 disabled:opacity-50"
+              className="bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition mb-2 disabled:opacity-50 w-full"
               onClick={handleCheckout}
-              disabled={cart.length === 0 || loading || (isDelivery && subtotal < deliveryMin)}
+              disabled={cart.length === 0 || loading}
             >
-              {loading ? 'Redirecting...' : 'Checkout'}
+              {loading ? 'Redirecting to Secure Checkout...' : 'Proceed to Secure Checkout'}
             </button>
             {error && <div className="text-red-500 mt-2">{error}</div>}
+            <div className="text-xs text-gray-500 mt-4">
+              Your payment information is secure and encrypted
+            </div>
             <br />
             <button
               className="text-gray-500 hover:underline text-sm"
