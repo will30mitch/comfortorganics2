@@ -10,7 +10,7 @@ export default function ContactPage() {
         <div className="mb-6 text-center text-black text-sm sm:text-base">
           <p className="mb-2"><b>Phone:</b> (903) 524-0310</p>
           <p className="mb-2"><b>Best Time to Call:</b> Mon-Fri, 9am - 5pm</p>
-          <p className="mb-2"><b>Email:</b> customersupport@comfortorganics.shop</p>
+          <p className="mb-2"><b>Email:</b> comfort_organics@yahoo.com</p>
         </div>
         <form className="flex flex-col gap-3 sm:gap-4">
           <input type="text" placeholder="Your Name" className="border rounded p-2 text-black text-sm sm:text-base" required />
