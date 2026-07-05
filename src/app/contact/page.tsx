@@ -8,6 +8,7 @@ export default function ContactPage() {
     email: '',
     message: '',
   });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -19,15 +20,22 @@ export default function ContactPage() {
     }));
   };
 
-  const mailtoLink = `mailto:comfort_organics@yahoo.com?subject=${encodeURIComponent(
-    `Website Contact Form - ${formData.name || ''}`
-  )}&body=${encodeURIComponent(
-    `Name: ${formData.name || ''}
-Email: ${formData.email || ''}
-
-Message:
-${formData.message || ''}`
-  )}`;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('Failed to send');
+      setStatus('sent');
+      setFormData({ name: '', email: '', message: '' });
+    } catch {
+      setStatus('error');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-200 to-yellow-100 py-8 px-2 sm:py-12 sm:px-4 flex flex-col items-center">
@@ -50,7 +58,7 @@ ${formData.message || ''}`
           <p className="mb-2"><b>Email:</b> comfort_organics@yahoo.com</p>
         </div>
 
-        <form className="flex flex-col gap-3 sm:gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4">
 
           <input
             type="text"
@@ -82,13 +90,24 @@ ${formData.message || ''}`
             required
           />
 
-          {/* FIXED BUTTON */}
-          <a
-            href={mailtoLink}
-            className="bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition text-sm sm:text-base text-center"
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition text-sm sm:text-base text-center disabled:opacity-60"
           >
-            Send Message
-          </a>
+            {status === 'sending' ? 'Sending...' : 'Send Message'}
+          </button>
+
+          {status === 'sent' && (
+            <p className="text-green-700 text-center text-sm sm:text-base">
+              Thanks! Your message has been sent.
+            </p>
+          )}
+          {status === 'error' && (
+            <p className="text-red-600 text-center text-sm sm:text-base">
+              Something went wrong. Please try again or call us directly.
+            </p>
+          )}
 
         </form>
       </div>
